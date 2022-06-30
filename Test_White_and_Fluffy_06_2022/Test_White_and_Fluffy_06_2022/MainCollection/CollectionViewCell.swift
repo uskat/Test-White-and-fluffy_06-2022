@@ -1,5 +1,6 @@
 
 import UIKit
+import SDWebImage
 
 class CollectionViewCell: UICollectionViewCell {
 
@@ -8,6 +9,8 @@ class CollectionViewCell: UICollectionViewCell {
     var unsplashPhoto: Photo! {
         didSet {
             let photoURL = unsplashPhoto.urls["regular"]
+            guard let imageURL = photoURL, let url = URL(string: imageURL) else { return }
+            imageView.sd_setImage(with: url, completed: nil)
         }
     }
     
@@ -18,36 +21,17 @@ class CollectionViewCell: UICollectionViewCell {
         return $0
     }(UIImageView())
     
-    /*private let marker: UIImageView = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.alpha = 0
-        return $0
-    }(UIImageView(image: UIImage(named: "checkmark")))
-    
-    override var isSelected: Bool {
-        didSet {
-            checkIsSelectedState()
-        }
-    }*/
-    
-    
     
 //MARK: - ==================================== INITs ====================================
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         imageView.image = nil
     }
-    
-    /*private func checkIsSelectedState() {
-        imageView.alpha = isSelected ? 0.65 : 1
-        marker.alpha = isSelected ? 1 : 0
-    }*/
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         showImageView()
-        //showMarker()
-        //checkIsSelectedState()
     }
     
     required init?(coder: NSCoder) {
@@ -56,10 +40,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     
 //MARK: - =================================== METHODs ===================================
-    func setupCell(_ photo: Photo) {
-        imageView.image = photo.imageName
-    }
-    
+
     private func showImageView() {
         addSubview(imageView)
         
@@ -70,16 +51,4 @@ class CollectionViewCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
     }
-    
-    /*private func showMarker() {
-        addSubview(marker)
-        
-        NSLayoutConstraint.activate([
-            marker.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -8),
-            marker.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -8),
-            marker.heightAnchor.constraint(equalToConstant: 20),
-            marker.widthAnchor.constraint(equalToConstant: 20)
-        ])
-    }*/
-    
 }

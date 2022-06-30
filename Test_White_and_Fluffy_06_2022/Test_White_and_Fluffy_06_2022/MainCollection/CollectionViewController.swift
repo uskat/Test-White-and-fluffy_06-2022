@@ -2,26 +2,12 @@
 import UIKit
 
 class CollectionViewController: UIViewController {
-    
-    //var photos = Photo.addPhotos()
+
+//MARK: - ================================== ViewITEMs ==================================
     var networkDataFetcher = NetworkDataFetcher()
     private var photos = [Photo]()
-    
     private var timer: Timer?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.navigationItem.title = "Photo Gallery"
-        view.backgroundColor = .systemGray6
-        showCollection()
-        //addNavigationBarButton()
-        addSearchBar()
-    }
-    
-    override func viewWillLayoutSubviews() {
-        checkOrientation()
-    }
-    
+
     private lazy var collectionView: UICollectionView = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.backgroundColor = .systemGray6
@@ -31,24 +17,44 @@ class CollectionViewController: UIViewController {
         return $0
     }(UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()))
     
-    private let addToFavoritesButton: CustomButton = {
+    private let addToFavouritesButton: CustomButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.layer.cornerRadius = 4
         $0.backgroundColor = .systemGray
-        $0.setTitle("Add photo to Favorites", for: .normal)
+        $0.setTitle("Add photo to Favourites", for: .normal)
         $0.setTitleColor(.white, for: .normal)
-        $0.addTarget(self, action: #selector(tapFavoritesButton), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(tapFavouritesButton), for: .touchUpInside)
         $0.layer.shadowOffset = CGSize(width: 4, height: 4)
         $0.layer.shadowRadius = 4
         $0.layer.shadowColor = UIColor.black.cgColor
         $0.layer.shadowOpacity = 0.7
         return $0
     }(CustomButton())
-
-    @objc private func tapFavoritesButton() {
-        
+    @objc private func tapFavouritesButton() {
+        print(#function)
+        let selectedPhotos = collectionView.indexPathsForSelectedItems?.reduce([], { (photosss, indexPath) -> [Photo] in
+            var mutablePhotos = photosss
+            let photo = photos[indexPath.item]
+            mutablePhotos.append(photo)
+            return mutablePhotos
+        })
+        let alert = UIAlertController(title: "ACHTUNG!", message: "Вы уверены, что хотите добавить это подозрительное фото в нашу чудесную коллекцию?!", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Зуб даю на отсечение!", style: .default) { _ in
+            let tabBar = self.tabBarController as! MainTabBarController
+            let navigationVC = tabBar.viewControllers?[1] as! UINavigationController
+            let favouritesVC = navigationVC.topViewController as! FavouritesViewController
+            favouritesVC.photos.append(contentsOf: selectedPhotos ?? [])
+            print("Ок")
+            self.closeOpenedPhoto()
+        }
+        let cancel = UIAlertAction(title: "Нет-нет. Это нелепая случайность", style: .cancel) { _ in
+            print("Отмена")
+        }
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        present(alert, animated: true)
     }
-    
+
     private let buttonX: UIButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.layer.cornerRadius = 12
@@ -62,16 +68,7 @@ class CollectionViewController: UIViewController {
     }(UIButton())
     @objc private func tapButtonX() {
         print("tap x")
-        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut) { [self] in
-            self.buttonX.alpha = 0.0
-        } completion: { _ in
-            self.buttonX.isHidden = true
-        }
-        UIView.transition(with: collectionView, duration: 1.0, options: .transitionFlipFromBottom, animations: { [self] in
-            //profileHeaderView.blurBackgroundEffect().removeFromSuperview()
-            collectionView.isUserInteractionEnabled = true
-            myView.removeFromSuperview()
-        }, completion: nil)
+        closeOpenedPhoto()
     }
 
     private var myImageView: UIImageView = {
@@ -88,20 +85,29 @@ class CollectionViewController: UIViewController {
     }(UIView())
 
     
-    /*private lazy var navigationBarButton: UIBarButtonItem = {
-        return $0
-    }(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(tapNavBar)))
+//MARK: - ==================================== INITs ====================================
     
-    @objc private func tapNavBar() {
-        print("hgfddfgdfgdf")
-    }*/
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemGray6
+        showCollection()
+        addSearchBar()
+    }
     
     
 //MARK: =================================== METHODs ===================================
     
-    /*private func addNavigationBarButton() {
-        navigationItem.rightBarButtonItem = navigationBarButton
-    }*/
+    private func closeOpenedPhoto() {
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut) { [self] in
+            self.buttonX.alpha = 0.0
+        } completion: { _ in
+            self.buttonX.isHidden = true
+        }
+        UIView.transition(with: collectionView, duration: 1.0, options: .transitionFlipFromBottom, animations: { [self] in
+            collectionView.isUserInteractionEnabled = true
+            myView.removeFromSuperview()
+        }, completion: nil)
+    }
     
     private func addSearchBar() {
         let searchController = UISearchController(searchResultsController: nil)
@@ -111,7 +117,6 @@ class CollectionViewController: UIViewController {
         searchController.searchBar.delegate = self
     }
 
-    
     private func showCollection() {
         view.addSubview(collectionView)
         
@@ -123,11 +128,11 @@ class CollectionViewController: UIViewController {
         ])
     }
      
-    func showViewWithPhotoOnTap(_ image: UIImage)  {
+    func showViewWithPhotoOnTap(_ image: Photo)  {
         UIView.transition(with: collectionView, duration: 3.0, options: .transitionFlipFromBottom, animations: { [self] in
             collectionView.addSubview(myView)
-            myImageView.image = image
-            [myImageView, buttonX, addToFavoritesButton].forEach { myView.addSubview($0) }
+            myImageView.sd_setImage(with: URL(string: image.urls["regular"]!), completed: nil)
+            [myImageView, buttonX, addToFavouritesButton].forEach { myView.addSubview($0) }
             
             NSLayoutConstraint.activate([
                 myView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
@@ -145,12 +150,13 @@ class CollectionViewController: UIViewController {
                 buttonX.widthAnchor.constraint(equalToConstant: 24),
                 buttonX.heightAnchor.constraint(equalToConstant: 24),
                 
-                addToFavoritesButton.bottomAnchor.constraint(equalTo: myView.bottomAnchor, constant: -16),
-                addToFavoritesButton.leadingAnchor.constraint(equalTo: myView.leadingAnchor, constant: 16),
-                addToFavoritesButton.trailingAnchor.constraint(equalTo: myView.trailingAnchor, constant: -16),
-                addToFavoritesButton.heightAnchor.constraint(equalToConstant: 40)
+                addToFavouritesButton.bottomAnchor.constraint(equalTo: myView.bottomAnchor, constant: -16),
+                addToFavouritesButton.leadingAnchor.constraint(equalTo: myView.leadingAnchor, constant: 16),
+                addToFavouritesButton.trailingAnchor.constraint(equalTo: myView.trailingAnchor, constant: -16),
+                addToFavouritesButton.heightAnchor.constraint(equalToConstant: 40)
             ])
         }, completion: nil)
+        
         UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseOut) { [self] in
             self.buttonX.isHidden = false
             self.buttonX.alpha = 1.0
@@ -160,13 +166,15 @@ class CollectionViewController: UIViewController {
 
 //MARK: - UICollectionViewDataSource
 extension CollectionViewController: UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         photos.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifier, for: indexPath) as! CollectionViewCell
         let photo = photos[indexPath.item]
-        cell.setupCell(photos[indexPath.row])
+        cell.unsplashPhoto = photo
         return cell
     }
 }
@@ -180,6 +188,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         let width = (absoluteWidth - 4 * inSpace) / 3
         return CGSize(width: width, height: width)
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         inSpace
     }
@@ -191,20 +200,23 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         UIEdgeInsets(top: inSpace, left: inSpace, bottom: inSpace, right: inSpace)
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let image = photos[indexPath.row].imageName
+        let image = photos[indexPath.row]//.imageName
         showViewWithPhotoOnTap(image)
     }
 }
+
 //MARK: - UIBarSearchDelegate
 extension CollectionViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print(searchText)
-        
+        timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false, block: { (_) in
             self.networkDataFetcher.fetchImage(searchTerm: searchText) { [weak self] (searchResults) in
                 guard let fetchedPhotos = searchResults else { return }
                 self?.photos = fetchedPhotos.results
+                self?.collectionView.reloadData()
             }
         })
     }
