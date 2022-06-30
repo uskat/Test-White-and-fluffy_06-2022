@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		08649357286D241C0020F889 /* FavouritesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08649356286D241C0020F889 /* FavouritesViewCell.swift */; };
+		0864935C286D57560020F889 /* FavouritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0864935B286D57560020F889 /* FavouritesTableViewController.swift */; };
+		0864935E286D58470020F889 /* FavouritesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0864935D286D58470020F889 /* FavouritesTableViewCell.swift */; };
 		0880F599286A0B1900AE3861 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0880F598286A0B1900AE3861 /* AppDelegate.swift */; };
 		0880F59B286A0B1900AE3861 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0880F59A286A0B1900AE3861 /* SceneDelegate.swift */; };
 		0880F59D286A0B1900AE3861 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0880F59C286A0B1900AE3861 /* CollectionViewController.swift */; };
@@ -27,6 +29,8 @@
 /* Begin PBXFileReference section */
 		073A09B0C22B14C603241B66 /* Pods-Test_White_and_Fluffy_06_2022.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Test_White_and_Fluffy_06_2022.debug.xcconfig"; path = "Target Support Files/Pods-Test_White_and_Fluffy_06_2022/Pods-Test_White_and_Fluffy_06_2022.debug.xcconfig"; sourceTree = "<group>"; };
 		08649356286D241C0020F889 /* FavouritesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesViewCell.swift; sourceTree = "<group>"; };
+		0864935B286D57560020F889 /* FavouritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesTableViewController.swift; sourceTree = "<group>"; };
+		0864935D286D58470020F889 /* FavouritesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesTableViewCell.swift; sourceTree = "<group>"; };
 		0880F595286A0B1900AE3861 /* Test_White_and_Fluffy_06_2022.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test_White_and_Fluffy_06_2022.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0880F598286A0B1900AE3861 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0880F59A286A0B1900AE3861 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +67,7 @@
 			children = (
 				0880F5AE286A119F00AE3861 /* FavouritesViewController.swift */,
 				08649356286D241C0020F889 /* FavouritesViewCell.swift */,
+				0864935F286D61BE0020F889 /* FavLikeTable-NOT USED */,
 			);
 			path = Favourites;
 			sourceTree = "<group>";
@@ -84,6 +89,15 @@
 				0880F5BA286B737100AE3861 /* SearchResults.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		0864935F286D61BE0020F889 /* FavLikeTable-NOT USED */ = {
+			isa = PBXGroup;
+			children = (
+				0864935B286D57560020F889 /* FavouritesTableViewController.swift */,
+				0864935D286D58470020F889 /* FavouritesTableViewCell.swift */,
+			);
+			path = "FavLikeTable-NOT USED";
 			sourceTree = "<group>";
 		};
 		0880F58C286A0B1900AE3861 = {
@@ -260,11 +274,13 @@
 				0880F5B9286B732E00AE3861 /* NetworkDataFetcher.swift in Sources */,
 				0880F599286A0B1900AE3861 /* AppDelegate.swift in Sources */,
 				08649357286D241C0020F889 /* FavouritesViewCell.swift in Sources */,
+				0864935E286D58470020F889 /* FavouritesTableViewCell.swift in Sources */,
 				0880F5B7286B2D6F00AE3861 /* Network.swift in Sources */,
 				0880F59B286A0B1900AE3861 /* SceneDelegate.swift in Sources */,
 				0880F5AF286A119F00AE3861 /* FavouritesViewController.swift in Sources */,
 				0880F5AD286A10FF00AE3861 /* MainTabBarControllerViewController.swift in Sources */,
 				0880F5BD286B85EB00AE3861 /* Constants+Extensions.swift in Sources */,
+				0864935C286D57560020F889 /* FavouritesTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
