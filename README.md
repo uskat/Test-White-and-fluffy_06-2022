@@ -33,7 +33,7 @@ _6. На задачу должно уйти до 16 часов (2 рабочих
 
 **Unrealised features and bad things:**
 * photos are not displayed randomly;  
-* endlessly add the same photo to your favorites;  
+* endlessly add the same photo to favorites;  
 * non-contextual naming;  
 * some problems with codestyle;  
 * controllers are overloaded with UI logic;  
