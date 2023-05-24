@@ -1,6 +1,6 @@
 # Unsplash photo collection
 ### Test task from White and fluffy (06-2022)
-Mostly complete without any knowledge of... network, API, libraries, patterns ))
+Mostly it was complete without any knowledge of... network, API, libraries, patterns ))
 
 ---
 
